@@ -25,17 +25,27 @@ function isPackageAvailable(html, pkg) {
 
 async function run() {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 10000);
+  const timer = setTimeout(() => controller.abort(), 12000);
 
   try {
     const res = await fetch(LIKECARD_URL, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; StockSync/1.0)",
-        "Accept-Language": "ar,en;q=0.9"
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "Accept":
+          "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+        "Accept-Language": "ar-OM,ar;q=0.9,en-US;q=0.8,en;q=0.7",
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache"
       },
       signal: controller.signal
     });
     clearTimeout(timer);
+
+    if (res.status === 403) {
+      console.warn("LikeCard blocked GitHub runner with HTTP 403; keeping current stock.json.");
+      return;
+    }
 
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const html = await res.text();
