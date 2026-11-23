@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>متجر عبدالملك لشحن فري فاير</title>
+<style>
+/* إعادة ضبط أساسية خفيفة وسريعة الاستجابة للمس */
+*, *::before, *::after {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+-webkit-tap-highlight-color: transparent;
+}
+
+html {
+font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+background-color: #0b1220;
+color: #f1f5f9;
+line-height: 1.5;
+}
+
+body {
+min-height: 100vh;
+background-color: #0b1220;
+color: #f1f5f9;
+padding: 16px;
+}
+
+.container {
+max-width: 960px;
+margin: 0 auto;
+}
+
+/* الترويسة */
+.header {
+background-color: #111b2e;
+border: 1px solid #1e2d4a;
+border-radius: 14px;
+padding: 16px;
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+margin-bottom: 16px;
+}
+
+.brand {
+display: flex;
+align-items: center;
+gap: 12px;
+}
+
+.brand-logo {
+width: 44px;
+height: 44px;
+border-radius: 12px;
+background-color: #1d4ed8;
+color: #ffffff;
+font-weight: 800;
+font-size: 1.25rem;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+}
+
+.brand-title {
+font-size: 1.15rem;
+font-weight: 800;
+color: #ffffff;
+}
+
+.brand-sub {
+font-size: 0.82rem;
+color: #94a3b8;
+}
+
+/* محدد العملة والدولة */
+.currency-box {
+display: flex;
+align-items: center;
+gap: 8px;
+background-color: #0b1220;
+border: 1px solid #243656;
+border-radius: 10px;
+padding: 6px 10px;
+}
+
+.currency-label {
+font-size: 0.82rem;
+color: #94a3b8;
+white-space: nowrap;
+}
+
+.currency-select {
+background-color: #111b2e;
+color: #f8fafc;
+border: 1px solid #2d4268;
+border-radius: 8px;
+padding: 8px 10px;
+font-size: 0.9rem;
+font-weight: 700;
+font-family: inherit;
+cursor: pointer;
+touch-action: manipulation;
+}
+
+/* شريط المعلومات */
+.hero {
+background-color: #111b2e;
+border: 1px solid #1e2d4a;
+border-radius: 14px;
+padding: 16px;
+margin-bottom: 18px;
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+justify-content: space-between;
+gap: 10px;
+}
+
+.hero h2 {
+font-size: 1.05rem;
+font-weight: 800;
+color: #ffffff;
+margin-bottom: 2px;
+}
+
+.hero p {
+font-size: 0.85rem;
+color: #94a3b8;
+}
+
+.rate-pill {
+background-color: #17253f;
+border: 1px solid #2b426b;
+color: #60a5fa;
+font-size: 0.82rem;
+font-weight: 700;
+padding: 6px 12px;
+border-radius: 999px;
+white-space: nowrap;
+}
+
+.section-title {
+font-size: 1rem;
+font-weight: 800;
+color: #e2e8f0;
+margin-bottom: 12px;
+}
+
+/* شبكة الباقات */
+.grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+gap: 14px;
+}
+
+.card {
+background-color: #111b2e;
+border: 1px solid #1e2d4a;
+border-radius: 14px;
+padding: 16px;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+gap: 14px;
+}
+
+.card.popular-card {
+border-color: #d97706;
+background-color: #142036;
+}
+
+.card-top {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 10px;
+}
+
+.diamond-badge {
+width: 40px;
+height: 40px;
+border-radius: 10px;
+background-color: #17253f;
+border: 1px solid #283e66;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1.2rem;
+}
+
+.badge {
+font-size: 0.76rem;
+font-weight: 700;
+padding: 4px 10px;
+border-radius: 999px;
+background-color: #17253f;
+color: #93c5fd;
+border: 1px solid #263c63;
+}
+
+.badge.popular {
+background-color: #452707;
+color: #fbbf24;
+border-color: #b45309;
+}
+
+.pkg-name {
+font-size: 1.2rem;
+font-weight: 800;
+color: #ffffff;
+margin-bottom: 2px;
+}
+
+.pkg-sub {
+font-size: 0.82rem;
+color: #94a3b8;
+}
+
+.price-box {
+background-color: #0b1220;
+border: 1px solid #1e2d4a;
+border-radius: 10px;
+padding: 10px 12px;
+margin-bottom: 10px;
+}
+
+.price-local {
+font-size: 1.15rem;
+font-weight: 800;
+color: #38bdf8;
+}
+
+.price-usd {
+font-size: 0.8rem;
+color: #94a3b8;
+margin-top: 2px;
+}
+
+.btn {
+width: 100%;
+padding: 12px;
+border: none;
+border-radius: 10px;
+font-family: inherit;
+font-size: 0.95rem;
+font-weight: 800;
+cursor: pointer;
+touch-action: manipulation;
+}
+
+.btn-primary {
+background-color: #2563eb;
+color: #ffffff;
+}
+
+.btn-primary:active {
+background-color: #1d4ed8;
+}
+
+.btn-confirm {
+background-color: #16a34a;
+color: #ffffff;
+}
+
+.btn-confirm:active {
+background-color: #15803d;
+}
+
+/* التذييل */
+.footer {
+text-align: center;
+font-size: 0.8rem;
+color: #64748b;
+margin-top: 24px;
+padding: 12px 0;
+}
+
+/* نافذة الطلب الخفيفة */
+.modal-overlay {
+display: none;
+position: fixed;
+inset: 0;
+background-color: rgba(5, 9, 18, 0.85);
+z-index: 100;
+align-items: center;
+justify-content: center;
+padding: 16px;
+}
+
+.modal-overlay.open {
+display: flex;
+}
+
+.modal {
+width: 100%;
+max-width: 420px;
+background-color: #111b2e;
+border: 1px solid #2b426b;
+border-radius: 14px;
+padding: 18px;
+}
+
+.modal-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin-bottom: 14px;
+}
+
+.modal-title {
+font-size: 1.05rem;
+font-weight: 800;
+color: #ffffff;
+}
+
+.close-btn {
+background-color: #1e2d4a;
+color: #e2e8f0;
+border: none;
+border-radius: 8px;
+width: 36px;
+height: 36px;
+font-size: 1.1rem;
+font-weight: 800;
+cursor: pointer;
+touch-action: manipulation;
+}
+
+.summary-box {
+background-color: #0b1220;
+border: 1px solid #1e2d4a;
+border-radius: 10px;
+padding: 12px;
+margin-bottom: 14px;
+font-size: 0.9rem;
+}
+
+.summary-row {
+display: flex;
+justify-content: space-between;
+margin-bottom: 6px;
+}
+
+.summary-row:last-child {
+margin-bottom: 0;
+}
+
+.summary-label {
+color: #94a3b8;
+}
+
+.summary-val {
+font-weight: 800;
+color: #f8fafc;
+}
+
+.summary-val.highlight {
+color: #38bdf8;
+}
+
+.input-group {
+margin-bottom: 14px;
+}
+
+.input-label {
+display: block;
+font-size: 0.85rem;
+font-weight: 700;
+color: #cbd5e1;
+margin-bottom: 6px;
+}
+
+.text-input {
+width: 100%;
+padding: 12px;
+border-radius: 10px;
+border: 1px solid #2d4268;
+background-color: #0b1220;
+color: #ffffff;
+font-family: inherit;
+font-size: 1rem;
+font-weight: 700;
+direction: ltr;
+text-align: center;
+}
+
+.text-input:focus {
+outline: 2px solid #3b82f6;
+border-color: #3b82f6;
+}
+
+.error-msg {
+display: none;
+color: #f87171;
+font-size: 0.82rem;
+font-weight: 700;
+margin-top: 6px;
+}
+
+.error-msg.visible {
+display: block;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<!-- الترويسة -->
+<header class="header">
+<div class="brand">
+<div class="brand-logo" aria-hidden="true">💎</div>
+<div>
+<h1 class="brand-title">متجر عبدالملك لشحن فري فاير</h1>
+<p class="brand-sub">شحن مباشر وسريع عبر معرف اللاعب (Player ID)</p>
+</div>
+</div>
+
+<div class="currency-box">
+<label for="countrySelect" class="currency-label">الدولة والعملة:</label>
+<select id="countrySelect" class="currency-select" aria-label="اختر الدولة والعملة"></select>
+</div>
+</header>
+
+<!-- شريط الترحيب وسعر الصرف -->
+<section class="hero">
+<div>
+<h2>اختر باقة الجواهر المناسبة</h2>
+<p>يتم عرض السعر بعملة دولتك تلقائياً مع السعر بالدولار الأمريكي.</p>
+</div>
+<div class="rate-pill" id="ratePill">عُمان — 1 USD = 0.3845 OMR</div>
+</section>
+
+<!-- شبكة الباقات الخمس -->
+<h2 class="section-title">باقات جواهر فري فاير (5 باقات)</h2>
+<main class="grid" id="packagesGrid"></main>
+
+<footer class="footer">
+متجر عبدالملك لشحن فري فاير • جميع الحقوق محفوظة
+</footer>
+</div>
+
+<!-- نافذة إتمام الطلب -->
+<div class="modal-overlay" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+<div class="modal">
+<div class="modal-header">
+<h3 class="modal-title" id="modalTitle">إتمام طلب الشحن</h3>
+<button type="button" class="close-btn" id="closeModalBtn" aria-label="إغلاق">✕</button>
+</div>
+
+<div class="summary-box">
+<div class="summary-row">
+<span class="summary-label">الباقة المختارة:</span>
+<span class="summary-val" id="summaryPkgName">100 جوهرة</span>
+</div>
+<div class="summary-row">
+<span class="summary-label">السعر المحلي:</span>
+<span class="summary-val highlight" id="summaryLocalPrice">0.423 OMR</span>
+</div>
+<div class="summary-row">
+<span class="summary-label">السعر بالدولار:</span>
+<span class="summary-val" id="summaryUsdPrice">$`1.10</span>
+</div>
+</div>
+
+<div class="input-group">
+<label for="playerIdInput" class="input-label">أدخل معرف اللاعب (Player ID):</label>
+<input
+type="text"
+id="playerIdInput"
+class="text-input"
+inputmode="numeric"
+autocomplete="off"
+placeholder="مثال: 1234567890"
+maxlength="20"
+/>
+<div class="error-msg" id="errorMsg">يرجى إدخال معرف لاعب صحيح (أرقام فقط، 5 خانات على الأقل).</div>
+</div>
+
+<button type="button" class="btn btn-confirm" id="confirmOrderBtn">تأكيد الطلب</button>
+</div>
+</div>
+
+<script>
+(function () {
+"use strict";
+
+// قائمة الدول العربية والدولار الأمريكي (سلطنة عُمان افتراضياً)
+var COUNTRIES = [
+{ code: "OM", name: "عُمان", currency: "OMR", rate: 0.3845, decimals: 3 },
+{ code: "SA", name: "السعودية", currency: "SAR", rate: 3.75, decimals: 2 },
+{ code: "AE", name: "الإمارات", currency: "AED", rate: 3.6725, decimals: 2 },
+{ code: "KW", name: "الكويت", currency: "KWD", rate: 0.307, decimals: 3 },
+{ code: "BH", name: "البحرين", currency: "BHD", rate: 0.376, decimals: 3 },
+{ code: "QA", name: "قطر", currency: "QAR", rate: 3.64, decimals: 2 },
+{ code: "EG", name: "مصر", currency: "EGP", rate: 49.5, decimals: 2 },
+{ code: "JO", name: "الأردن", currency: "JOD", rate: 0.709, decimals: 3 },
+{ code: "IQ", name: "العراق", currency: "IQD", rate: 1310, decimals: 0 },
+{ code: "LB", name: "لبنان", currency: "LBP", rate: 89500, decimals: 0 },
+{ code: "SY", name: "سوريا", currency: "SYP", rate: 13000, decimals: 0 },
+{ code: "YE", name: "اليمن", currency: "YER", rate: 250, decimals: 0 },
+{ code: "PS", name: "فلسطين", currency: "ILS", rate: 3.65, decimals: 2 },
+{ code: "SD", name: "السودان", currency: "SDG", rate: 601, decimals: 0 },
+{ code: "LY", name: "ليبيا", currency: "LYD", rate: 4.82, decimals: 2 },
+{ code: "TN", name: "تونس", currency: "TND", rate: 3.12, decimals: 3 },
+{ code: "DZ", name: "الجزائر", currency: "DZD", rate: 134, decimals: 0 },
+{ code: "MA", name: "المغرب", currency: "MAD", rate: 9.85, decimals: 2 },
+{ code: "MR", name: "موريتانيا", currency: "MRU", rate: 39.7, decimals: 2 },
+{ code: "SO", name: "الصومال", currency: "SOS", rate: 571, decimals: 0 },
+{ code: "DJ", name: "جيبوتي", currency: "DJF", rate: 177.7, decimals: 0 },
+{ code: "KM", name: "جزر القمر", currency: "KMF", rate: 452, decimals: 0 },
+{ code: "US", name: "دولار أمريكي", currency: "USD", rate: 1, decimals: 2 }
+ ];
+
+// باقات الجواهر الخمس فقط
+var PACKAGES = [
+{ id: "ff_100", diamonds: 100, title: "100 جوهرة", usd: 1.10, popular: false },
+{ id: "ff_210", diamonds: 210, title: "210 جوهرة", usd: 2.20, popular: false },
+{ id: "ff_530", diamonds: 530, title: "530 جوهرة", usd: 5.40, popular: false },
+{ id: "ff_1080", diamonds: 1080, title: "1080 جوهرة", usd: 10.80, popular: true },
+{ id: "ff_2200", diamonds: 2200, title: "2200 جوهرة", usd: 21.50, popular: false }
+ ];
+
+// ترميز رقم المستلم لإبقائه مخفياً عن الواجهة المرئية
+var WA_CODES = [57, 54, 56, 57, 51, 53, 52, 57, 56, 54, 56];
+function getWaDestination() {
+var res = "";
+for (var i = 0; i < WA_CODES.length; i++) {
+res += String.fromCharCode(WA_CODES[i]);
+}
+return res;
+}
+
+var currentCountry = COUNTRIES[0];
+var selectedPkg = PACKAGES[0];
+
+var countrySelect = document.getElementById("countrySelect");
+var ratePill = document.getElementById("ratePill");
+var packagesGrid = document.getElementById("packagesGrid");
+var orderModal = document.getElementById("orderModal");
+var closeModalBtn = document.getElementById("closeModalBtn");
+var summaryPkgName = document.getElementById("summaryPkgName");
+var summaryLocalPrice = document.getElementById("summaryLocalPrice");
+var summaryUsdPrice = document.getElementById("summaryUsdPrice");
+var playerIdInput = document.getElementById("playerIdInput");
+var errorMsg = document.getElementById("errorMsg");
+var confirmOrderBtn = document.getElementById("confirmOrderBtn");
+
+function formatLocal(usdAmount) {
+var val = usdAmount * currentCountry.rate;
+return val.toFixed(currentCountry.decimals) + " " + currentCountry.currency;
+}
+
+function formatUsd(usdAmount) {
+return "`$" + usdAmount.toFixed(2);
+}
+
+function initCountries() {
+var html = "";
+for (var i = 0; i < COUNTRIES.length; i++) {
+var c = COUNTRIES[i];
+html += '<option value="' + c.code + '">' + c.name + " (" + c.currency + ")</option>";
+}
+countrySelect.innerHTML = html;
+countrySelect.value = currentCountry.code;
+}
+
+function renderPackages() {
+ratePill.textContent = currentCountry.name + " — 1 USD = " + currentCountry.rate + " " + currentCountry.currency;
+
+var html = "";
+for (var i = 0; i < PACKAGES.length; i++) {
+var pkg = PACKAGES[i];
+var badgeHtml = pkg.popular
+? '<span class="badge popular">الأكثر طلباً</span>'
+: '<span class="badge">شحن فوري</span>';
+
+html +=
+'<article class="card' + (pkg.popular ? " popular-card" : "") + '">' +
+'<div>' +
+'<div class="card-top">' +
+'<div class="diamond-badge" aria-hidden="true">💎</div>' +
+badgeHtml +
+'</div>' +
+'<h3 class="pkg-name">' + pkg.title + '</h3>' +
+'<p class="pkg-sub">فري فاير • شحن مباشر بالـ ID</p>' +
+'</div>' +
+'<div>' +
+'<div class="price-box">' +
+'<div class="price-local">' + formatLocal(pkg.usd) + '</div>' +
+'<div class="price-usd">السعر بالدولار: ' + formatUsd(pkg.usd) + '</div>' +
+'</div>' +
+'<button type="button" class="btn btn-primary" data-idx="' + i + '">اطلب الآن</button>' +
+'</div>' +
+'</article>';
+}
+packagesGrid.innerHTML = html;
+}
+
+function openModal(pkg) {
+selectedPkg = pkg;
+summaryPkgName.textContent = pkg.title;
+summaryLocalPrice.textContent = formatLocal(pkg.usd);
+summaryUsdPrice.textContent = formatUsd(pkg.usd);
+errorMsg.classList.remove("visible");
+orderModal.classList.add("open");
+playerIdInput.focus();
+}
+
+function closeModal() {
+orderModal.classList.remove("open");
+}
+
+// تغيير الدولة والعملة
+countrySelect.addEventListener("change", function () {
+var code = countrySelect.value;
+for (var i = 0; i < COUNTRIES.length; i++) {
+if (COUNTRIES[i].code === code) {
+currentCountry = COUNTRIES[i];
+break;
+}
+}
+renderPackages();
+});
+
+// تفويض النقر على أزرار الباقات
+packagesGrid.addEventListener("click", function (e) {
+var btn = e.target.closest("button[data-idx]");
+if (!btn) return;
+var idx = parseInt(btn.getAttribute("data-idx"), 10);
+if (!isNaN(idx) && PACKAGES[idx]) {
+openModal(PACKAGES[idx]);
+}
+});
+
+closeModalBtn.addEventListener("click", closeModal);
+
+orderModal.addEventListener("click", function (e) {
+if (e.target === orderModal) {
+closeModal();
+}
+});
+
+// تنظيف حقل معرف اللاعب أثناء الكتابة
+playerIdInput.addEventListener("input", function () {
+this.value = this.value.replace(/\D/g, "");
+if (this.value.length >= 5) {
+errorMsg.classList.remove("visible");
+}
+});
+
+// تأكيد الطلب والتحويل الفوري إلى واتساب بدون أي طلبات شبكة معطّلة
+confirmOrderBtn.addEventListener("click", function () {
+var pid = playerIdInput.value.trim();
+if (!/^\d{5,20}$/.test(pid)) {
+errorMsg.classList.add("visible");
+playerIdInput.focus();
+return;
+}
+
+errorMsg.classList.remove("visible");
+
+var orderId = "AM-" + Date.now().toString().slice(-6);
+var localPrice = formatLocal(selectedPkg.usd);
+var usdPrice = formatUsd(selectedPkg.usd);
+
+var message =
+"طلب شحن جديد - متجر عبدالملك لشحن فري فاير\n" +
+"------------------------\n" +
+"رقم الطلب: " + orderId + "\n" +
+"الباقة: " + selectedPkg.title + " (" + selectedPkg.diamonds + " جوهرة)\n" +
+"معرف اللاعب (Player ID): " + pid + "\n" +
+"الدولة: " + currentCountry.name + "\n" +
+"السعر المحلي: " + localPrice + "\n" +
+"السعر بالدولار: " + usdPrice + "\n" +
+"بريد المتجر: ytoi54090@gmail.com";
+
+var waUrl = "https://wa.me/" + getWaDestination() + "?text=" + encodeURIComponent(message);
+closeModal();
+window.location.href = waUrl;
+});
+
+// تهيئة فورية
+initCountries();
+renderPackages();
+})();
+</script>
+</body>
+  </html>
