@@ -174,6 +174,12 @@ border-color: #d97706;
 background-color: #142036;
 }
 
+.card.out-of-stock {
+opacity: 0.65;
+border-color: #334155;
+background-color: #0e1626;
+}
+
 .card-top {
 display: flex;
 align-items: center;
@@ -207,6 +213,12 @@ border: 1px solid #263c63;
 background-color: #452707;
 color: #fbbf24;
 border-color: #b45309;
+}
+
+.badge.unavailable {
+background-color: #3f161b;
+color: #fca5a5;
+border-color: #991b1b;
 }
 
 .pkg-name {
@@ -260,6 +272,12 @@ color: #ffffff;
 
 .btn-primary:active {
 background-color: #1d4ed8;
+}
+
+.btn-disabled {
+background-color: #1e293b;
+color: #94a3b8;
+cursor: not-allowed;
 }
 
 .btn-confirm {
@@ -462,7 +480,7 @@ display: block;
 </div>
 <div class="summary-row">
 <span class="summary-label">السعر بالدولار:</span>
-<span class="summary-val" id="summaryUsdPrice">$`1.10</span>
+<span class="summary-val" id="summaryUsdPrice">$1.10</span>
 </div>
 </div>
 
@@ -524,6 +542,14 @@ var PACKAGES = [
 { id: "ff_2200", diamonds: 2200, title: "2200 جوهرة", usd: 21.50, popular: false }
  ];
 
+var stockMap = {
+"100": true,
+"210": true,
+"530": true,
+"1080": true,
+"2200": true
+};
+
 // ترميز رقم المستلم لإبقائه مخفياً عن الواجهة المرئية
 var WA_CODES = [57, 54, 56, 57, 51, 53, 52, 57, 56, 54, 56];
 function getWaDestination() {
@@ -549,13 +575,21 @@ var playerIdInput = document.getElementById("playerIdInput");
 var errorMsg = document.getElementById("errorMsg");
 var confirmOrderBtn = document.getElementById("confirmOrderBtn");
 
+function isAvailable(pkg) {
+var key = String(pkg.diamonds);
+if (stockMap && Object.prototype.hasOwnProperty.call(stockMap, key)) {
+return stockMap[key] !== false;
+}
+return true;
+}
+
 function formatLocal(usdAmount) {
 var val = usdAmount * currentCountry.rate;
 return val.toFixed(currentCountry.decimals) + " " + currentCountry.currency;
 }
 
 function formatUsd(usdAmount) {
-return "`$" + usdAmount.toFixed(2);
+return "$" + usdAmount.toFixed(2);
 }
 
 function initCountries() {
@@ -574,33 +608,67 @@ ratePill.textContent = currentCountry.name + " — 1 USD = " + currentCountry.ra
 var html = "";
 for (var i = 0; i < PACKAGES.length; i++) {
 var pkg = PACKAGES[i];
-var badgeHtml = pkg.popular
+var available = isAvailable(pkg);
+
+var badgeHtml = !available
+? '<span class="badge unavailable">غير متوفر</span>'
+: (pkg.popular
 ? '<span class="badge popular">الأكثر طلباً</span>'
-: '<span class="badge">شحن فوري</span>';
+: '<span class="badge">شحن فوري</span>');
+
+var cardClasses = "card" +
+(available && pkg.popular ? " popular-card" : "") +
+(!available ? " out-of-stock" : "");
+
+var btnHtml = available
+? '<button type="button" class="btn btn-primary" data-idx="' + i + '">اطلب الآن</button>'
+: '<button type="button" class="btn btn-disabled" disabled aria-disabled="true">غير متوفر حالياً</button>';
 
 html +=
-'<article class="card' + (pkg.popular ? " popular-card" : "") + '">' +
+'<article class="' + cardClasses + '">' +
 '<div>' +
 '<div class="card-top">' +
 '<div class="diamond-badge" aria-hidden="true">💎</div>' +
 badgeHtml +
 '</div>' +
 '<h3 class="pkg-name">' + pkg.title + '</h3>' +
-'<p class="pkg-sub">فري فاير • شحن مباشر بالـ ID</p>' +
+'<p class="pkg-sub">' + (available ? "فري فاير • شحن مباشر بالـ ID" : "نفذت الكمية مؤقتاً") + '</p>' +
 '</div>' +
 '<div>' +
 '<div class="price-box">' +
 '<div class="price-local">' + formatLocal(pkg.usd) + '</div>' +
 '<div class="price-usd">السعر بالدولار: ' + formatUsd(pkg.usd) + '</div>' +
 '</div>' +
-'<button type="button" class="btn btn-primary" data-idx="' + i + '">اطلب الآن</button>' +
+btnHtml +
 '</div>' +
 '</article>';
 }
 packagesGrid.innerHTML = html;
 }
 
+function loadStock() {
+fetch("./stock.json?t=" + Date.now(), { cache: "no-store" })
+.then(function (res) {
+if (!res.ok) throw new Error("HTTP " + res.status);
+return res.json();
+})
+.then(function (data) {
+if (data && data.packages && typeof data.packages === "object") {
+for (var k in data.packages) {
+if (Object.prototype.hasOwnProperty.call(data.packages, k)) {
+stockMap[String(k)] = Boolean(data.packages[k]);
+}
+}
+renderPackages();
+}
+})
+.catch(function () {
+// الإبقاء على الحالة الافتراضية دون تعطيل المتجر
+});
+}
+
 function openModal(pkg) {
+if (!isAvailable(pkg)) return;
 selectedPkg = pkg;
 summaryPkgName.textContent = pkg.title;
 summaryLocalPrice.textContent = formatLocal(pkg.usd);
@@ -629,9 +697,9 @@ renderPackages();
 // تفويض النقر على أزرار الباقات
 packagesGrid.addEventListener("click", function (e) {
 var btn = e.target.closest("button[data-idx]");
-if (!btn) return;
+if (!btn || btn.disabled) return;
 var idx = parseInt(btn.getAttribute("data-idx"), 10);
-if (!isNaN(idx) && PACKAGES[idx]) {
+if (!isNaN(idx) && PACKAGES[idx] && isAvailable(PACKAGES[idx])) {
 openModal(PACKAGES[idx]);
 }
 });
@@ -654,6 +722,12 @@ errorMsg.classList.remove("visible");
 
 // تأكيد الطلب والتحويل الفوري إلى واتساب بدون أي طلبات شبكة معطّلة
 confirmOrderBtn.addEventListener("click", function () {
+if (!isAvailable(selectedPkg)) {
+closeModal();
+renderPackages();
+return;
+}
+
 var pid = playerIdInput.value.trim();
 if (!/^\d{5,20}$/.test(pid)) {
 errorMsg.classList.add("visible");
@@ -683,10 +757,11 @@ closeModal();
 window.location.href = waUrl;
 });
 
-// تهيئة فورية
+// تهيئة فورية ثم جلب حالة المخزون من stock.json
 initCountries();
 renderPackages();
+loadStock();
 })();
 </script>
 </body>
-  </html>
+</html>
